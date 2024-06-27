@@ -1,0 +1,9 @@
+[package]
+name = "homomorphic_vote"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+num-bigint = "0.4.4"
+rand = "0.8"
+rug = "1.24.1"

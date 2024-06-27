@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Web安全实验</title>
+  </head>
+
+  <body>
+    <!-- Header -->
+    <header>
+      <h1>Victim</h1>
+      {% if message %}
+      <p style="color: red">{{message}}</p>
+      {% endif %}
+    </header>
+
+    {% if login %}
+
+    <p>用户{{username}}当前余额{{remain}}</p>
+
+    <!-- Write form -->
+    <form action="/consume" method="POST">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+      <input type="number" name="amount" min="0" step="1" required />
+      <input type="submit" value="消耗余额" />
+    </form>
+
+
+    <button onclick="logout()">Logout</button>
+
+  <script>
+    function logout() {
+      // 清除所有 Cookie
+      var cookies = document.cookie.split(";");
+      for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i];
+        var eqPos = cookie.indexOf("=");
+        var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+        document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+      }
+
+      // 跳转到网页根目录
+      window.location.href = "/";
+    }
+  </script>
+
+    {% else%}
+
+    <p>登录：</p>
+    <form action="/" method="POST">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+      <input
+        type="text"
+        name="user_name_login"
+        placeholder="用户名"
+        autocomplete="off"
+      />
+      <input
+        type="text"
+        name="password"
+        placeholder="密码"
+        autocomplete="off"
+      />
+      <input type="submit" value="登录" />
+    </form>
+
+    <p>注册：</p>
+    <form action="/" method="POST">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+      <input
+        type="text"
+        name="user_name_register"
+        placeholder="用户名"
+        autocomplete="off"
+      />
+      <input
+        type="text"
+        name="password"
+        placeholder="密码"
+        autocomplete="off"
+      />
+      <input type="submit" value="注册" />
+    </form>
+
+    {% endif %}
+  </body>
+</html>
+{% endautoescape %}
