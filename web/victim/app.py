@@ -3,15 +3,19 @@ import sqlite3
 
 from flask_wtf.csrf import CSRFProtect
 
+from flask_cors import cross_origin
+
 import os 
 # 启动flask
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(64)
 
-INSECURE = False
+INSECURE = True
 
 if not INSECURE:
     csrf = CSRFProtect(app)
+
+
 
 # 连接数据库
 def connect_db():
@@ -132,6 +136,7 @@ def make_cookie(username):
 
 
 @app.route("/consume", methods=["POST"])
+# @cross_origin()
 def consume():
     username = get_username(request)
     if not username:
